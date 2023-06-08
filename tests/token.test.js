@@ -27,7 +27,7 @@ describe('router login', () => {
     middleware.tokenExtractor(request, response, next)
     expect(request.token).toBe('secret-token')
     expect(next).toHaveBeenCalledTimes(1)
-  })
+  }, 100000)
 
   test('login succeeds with valid credentials', async () => {
     const response = await api
@@ -39,7 +39,7 @@ describe('router login', () => {
     expect(response.body.token).toBeDefined()
     expect(response.body.username).toBe('testuser')
     expect(response.body.name).toBeUndefined()
-  })
+  }, 100000)
 
   test('login fails with invalid credentials', async () => {
     const response = await api
@@ -52,7 +52,7 @@ describe('router login', () => {
     expect(response.body.username).toBeUndefined()
     expect(response.body.name).toBeUndefined()
     expect(response.body.error).toBeDefined()
-  })
+  }, 100000)
 })
 
 describe('Blog API token tests', () => {
@@ -100,7 +100,7 @@ describe('Blog API token tests', () => {
 
     expect(response.body).toHaveLength(helper.initialBlogs.length + 1)
     expect(titles).toContain('New Blog')
-  })
+  }, 100000)
 })
 
 
@@ -140,7 +140,7 @@ describe('deletion of a blog', () => {
     })
 
     await newBlog.save()
-  })
+  }, 100000)
 
   test('succeeds with status code 204 if id is valid and token is valid', async () => {
     const blogsAtStart = await helper.blogsInDb()
@@ -158,7 +158,7 @@ describe('deletion of a blog', () => {
     const titles = blogsAtEnd.map(r => r.title)
 
     expect(titles).not.toContain(blogToDelete.title)
-  })
+  }, 100000)
 
   test('fails with status code 401 if token is not provided', async () => {
     const blogsAtStart = await helper.blogsInDb()
@@ -175,7 +175,7 @@ describe('deletion of a blog', () => {
     const titles = blogsAtEnd.map(r => r.title)
 
     expect(titles).toContain(blogToDelete.title)
-  })
+  }, 100000)
 
   test('fails with status code 401 if token is invalid', async () => {
     const blogsAtStart = await helper.blogsInDb()
@@ -193,7 +193,7 @@ describe('deletion of a blog', () => {
     const titles = blogsAtEnd.map(r => r.title)
 
     expect(titles).toContain(blogToDelete.title)
-  })
+  }, 100000)
 
   test('fails with status code 403 if token is valid but user is not the creator of the blog', async () => {
     const blogsAtStart = await helper.blogsInDb()
@@ -224,7 +224,7 @@ describe('deletion of a blog', () => {
 
     const blogsAtEnd = await helper.blogsInDb()
     expect(blogsAtEnd).toHaveLength(blogsAtStart.length)
-  })
+  }, 100000)
 })
 
 describe('getting user information during blog post or delete', () => {

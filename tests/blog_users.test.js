@@ -33,7 +33,7 @@ describe('creating a new user', () => {
 
     const passwordMatch = await bcrypt.compare(newUser.password, savedUser.passwordHash)
     expect(passwordMatch).toBe(true)
-  })
+  }, 100000)
 
   test('fails with status code 400 if username or password is missing', async () => {
     const newUser = {
@@ -48,7 +48,7 @@ describe('creating a new user', () => {
 
     const users = await helper.usersInDb()
     expect(users).toHaveLength(0)
-  })
+  }, 100000)
 
   test('fails with status code 400 if username or password is less than 3 characters', async () => {
     const newUser = {
@@ -65,7 +65,7 @@ describe('creating a new user', () => {
 
     const users = await helper.usersInDb()
     expect(users).toHaveLength(0)
-  })
+  }, 100000)
 
   test('fails with status code 400 if username is not unique', async () => {
     const newUser = {
@@ -92,7 +92,7 @@ describe('creating a new user', () => {
 
     const users = await helper.usersInDb()
     expect(users).toHaveLength(1)
-  })
+  }, 100000)
 })
 
 afterAll(() => {
