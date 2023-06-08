@@ -25,15 +25,13 @@ jobs:
       - name: Test backend
         run: npm run testBE
       - name: Start backend server
-        run: npm run devBE
-        background: true
+        run: npm run devBE &
       - name: Wait for backend server
         run: |
           echo "Waiting for backend server to start..."
           npx wait-on http://localhost:3001
       - name: Start frontend server
-        run: npm run startFE
-        background: true
+        run: npm run startFE &
       - name: Wait for frontend server
         run: |
           echo "Waiting for frontend server to start..."
@@ -74,12 +72,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: '0'
+          fetch-depth: "0"
       - name: Bump version and push tag
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && contains(github.event.commits.*.message, '#skip') != true }}
         uses: anothrNick/github-tag-action@1.64.0
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: true
           PRERELEASE: true
       - name: Deploy to production
