@@ -28,13 +28,17 @@ jobs:
         run: npm run eslint
       - name: Build frontend
         run: npm run build
+      - name: Start backend and frontend servers
+        run: |
+          npm run devBE & npm run startFE &
+          sleep 5
       - name: Test backend
         run: npm run testBE
       - name: Run e2e tests
         uses: cypress-io/github-action@v5
         with:
           command: npm run test:e2e
-          start: npm run startFE "&" npm run devBE "&" sleep 5
+          start: echo "E2E tests will run with servers already started."
           wait-on: http://localhost:3000
       - name: Deployment Successful
         if: success()

@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start-servers": "react-scripts start && cross-env NODE_ENV=production node index.js",
-    "start-test-servers": "react-scripts start && cross-env NODE_ENV=development nodemon index.js",
+    "start-servers": "react-scripts start & cross-env NODE_ENV=production node index.js",
+    "start-test-servers": "react-scripts start & cross-env NODE_ENV=development nodemon index.js",
     "startFE": "react-scripts start",
     "build": "react-scripts build",
     "ejectFE": "react-scripts eject",
