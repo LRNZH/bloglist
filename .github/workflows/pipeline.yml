@@ -34,8 +34,8 @@ jobs:
         uses: cypress-io/github-action@v5
         with:
           command: npm run test:e2e
-          start: npm run devBE
-          wait-on: http://localhost:3001
+          start:  npm run devBE "&" npm run start "&" sleep 5
+          wait-on: http://localhost:3000
       - name: Deployment Successful
         if: success()
         uses: rjstone/discord-webhook-notify@v1
