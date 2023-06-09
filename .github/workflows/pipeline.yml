@@ -16,6 +16,7 @@ jobs:
       BEPORT: ${{ secrets.BEPORT }}
       PORT: ${{ secrets.PORT }}
       TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
+      SECRET: ${{ secrets.SECRET }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
