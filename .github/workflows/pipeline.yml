@@ -19,11 +19,11 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Set environment variables
-        run: |
-          echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" >> $GITHUB_ENV
-          echo "BEPORT=${{ secrets.BEPORT }}" >> $GITHUB_ENV
-          echo "PORT=${{ secrets.PORT }}" >> $GITHUB_ENV
-          echo "TEST_MONGODB_URI=${{ secrets.TEST_MONGODB_URI }}" >> $GITHUB_ENV
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          BEPORT: ${{ secrets.BEPORT }}
+          PORT: ${{ secrets.PORT }}
+          TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
       - name: Lint
         run: npm run eslint
       - name: Build frontend
