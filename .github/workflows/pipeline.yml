@@ -10,7 +10,7 @@ on:
 
 jobs:
   simple_deployment_pipeline:
-    runs-on: self-hosted
+    runs-on: ubuntu latest
     env:
       MONGODB_URI: ${{ secrets.MONGODB_URI }}
       BEPORT: 3001
@@ -24,22 +24,21 @@ jobs:
           node-version: "16"
       - name: Install dependencies
         run: npm install
-      - name: Lint
-        run: npm run eslint
       - name: Build frontend
         run: npm run build
-      - name: Start backend and frontend servers
+      - name: Start frontend server
         run: |
-          npm run start-test-servers "&"
-          sleep 5
-      - name: Test backend
-        run: npm run testBE
+          npm run start-FE
       - name: Run e2e tests
         uses: cypress-io/github-action@v5
         with:
           command: npm run test:e2e
-          start: echo "E2E tests will run with servers already started."
+          start: npm run devFE "&" sleep 5
           wait-on: http://localhost:3000
+      - name: Lint
+        run: npm run eslint
+      - name: Test backend
+        run: npm run testBE
       - name: Deployment Successful
         if: success()
         uses: rjstone/discord-webhook-notify@v1
