@@ -26,21 +26,24 @@ jobs:
         run: npm install
       - name: Build frontend
         run: npm run build
-      - name: Start backend and frontend servers
+      - name: Start backend server
         run: |
-          npm run devBE > backend.log 2>&1 "&"
-          npm run startFE > frontend.log 2>&1 "&"
-          sleep 5
+          npm run devBE &
+      - name: Wait for backend server to start
+        run: |
+          until nc -z localhost 3001; do
+            sleep 1
+          done
+      - name: Test backend
+        run: npm run testBE
       - name: Run e2e tests
         uses: cypress-io/github-action@v5
         with:
           command: npm run test:e2e
-          start: echo "E2E tests will run with servers already started."
+          start: echo "E2E tests will run with backend server already started."
           wait-on: http://localhost:3000
       - name: Lint
         run: npm run eslint
-      - name: Test backend
-        run: npm run testBE   
       - name: Deployment Successful
         if: success()
         uses: rjstone/discord-webhook-notify@v1
