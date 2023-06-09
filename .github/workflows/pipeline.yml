@@ -30,13 +30,13 @@ jobs:
       - name: Test backend
         run: npm run testBE
       - name: Start backend server
-        run: npm run devBE "&"
+        run: npm run devBE
       - name: Wait for backend server
         run: |
           echo "Waiting for backend server to start..."
           npx wait-on http://localhost:${{ secrets.BEPORT }}
       - name: Start frontend server
-        run: npm run startFE "&"
+        run: npm run startFE
       - name: Wait for frontend server
         run: |
           echo "Waiting for frontend server to start..."
