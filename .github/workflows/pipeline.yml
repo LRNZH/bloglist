@@ -29,18 +29,13 @@ jobs:
       - name: Start backend server
         run: |
           npm run devBE "&"
-      - name: Wait for backend server to start
-        run: |
-          until nc -z localhost 3001; do
-            sleep 1
-          done
       - name: Test backend
         run: npm run testBE
       - name: Run e2e tests
         uses: cypress-io/github-action@v5
         with:
           command: npm run test:e2e
-          start: npm run startFE
+          start: npm run devBE
           wait-on: http://localhost:3000
       - name: Lint
         run: npm run eslint
