@@ -28,7 +28,7 @@ jobs:
         run: npm run build
       - name: Start frontend server
         run: |
-          npm run start-FE
+          npm run startFE
       - name: Run e2e tests
         uses: cypress-io/github-action@v5
         with:
