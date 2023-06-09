@@ -27,7 +27,7 @@ jobs:
       - name: Lint
         run: npm run eslint
       - name: Build frontend
-        run: npm run buildFE
+        run: npm run build
       - name: Test backend
         run: npm run testBE
       - name: Run e2e tests
