@@ -40,7 +40,7 @@ jobs:
         uses: cypress-io/github-action@v5
         with:
           command: npm run test:e2e
-          start: echo "E2E tests will run with backend server already started."
+          start: npm run startFE
           wait-on: http://localhost:3000
       - name: Lint
         run: npm run eslint
