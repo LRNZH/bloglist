@@ -19,17 +19,11 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Set environment variables
-        env:
-          MONGODB_URI: ${{ secrets.MONGODB_URI }}
-          BEPORT: ${{ secrets.BEPORT }}
-          PORT: ${{ secrets.PORT }}
-          TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
         run: |
-          echo "MONGODB_URI=$MONGODB_URI" >> $GITHUB_ENV
-          echo "BEPORT=$BEPORT" >> $GITHUB_ENV
-          echo "PORT=$PORT" >> $GITHUB_ENV
-          echo "TEST_MONGODB_URI=$TEST_MONGODB_URI" >> $GITHUB_ENV
-
+          echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" >> $GITHUB_ENV
+          echo "BEPORT=${{ secrets.BEPORT }}" >> $GITHUB_ENV
+          echo "PORT=${{ secrets.PORT }}" >> $GITHUB_ENV
+          echo "TEST_MONGODB_URI=${{ secrets.TEST_MONGODB_URI }}" >> $GITHUB_ENV
       - name: Lint
         run: npm run eslint
       - name: Build frontend
@@ -41,18 +35,18 @@ jobs:
       - name: Wait for backend server
         run: |
           echo "Waiting for backend server to start..."
-          npx wait-on http://localhost:3001
+          npx wait-on http://localhost:${{ secrets.BEPORT }}
       - name: Start frontend server
         run: npm run startFE "&"
       - name: Wait for frontend server
         run: |
           echo "Waiting for frontend server to start..."
-          npx wait-on http://localhost:3000
+          npx wait-on http://localhost:${{ secrets.PORT }}
       - name: Run e2e tests
         uses: cypress-io/github-action@v5
         with:
           command: npm run test:e2e
-          wait-on: http://localhost:3000
+          wait-on: http://localhost:${{ secrets.PORT }}
       - name: Deployment Successful
         if: success()
         uses: rjstone/discord-webhook-notify@v1
