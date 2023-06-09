@@ -18,6 +18,18 @@ jobs:
           node-version: "16"
       - name: Install dependencies
         run: npm install
+      - name: Set environment variables
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          BEPORT: ${{ secrets.BEPORT }}
+          PORT: ${{ secrets.PORT }}
+          TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
+        run: |
+          echo "MONGODB_URI=$MONGODB_URI" >> $GITHUB_ENV
+          echo "BEPORT=$BEPORT" >> $GITHUB_ENV
+          echo "PORT=$PORT" >> $GITHUB_ENV
+          echo "TEST_MONGODB_URI=$TEST_MONGODB_URI" >> $GITHUB_ENV
+
       - name: Lint
         run: npm run eslint
       - name: Build frontend
@@ -25,13 +37,13 @@ jobs:
       - name: Test backend
         run: npm run testBE
       - name: Start backend server
-        run: npm run devBE &
+        run: npm run devBE "&"
       - name: Wait for backend server
         run: |
           echo "Waiting for backend server to start..."
           npx wait-on http://localhost:3001
       - name: Start frontend server
-        run: npm run startFE &
+        run: npm run startFE "&"
       - name: Wait for frontend server
         run: |
           echo "Waiting for frontend server to start..."
