@@ -34,7 +34,7 @@ jobs:
         uses: cypress-io/github-action@v5
         with:
           command: npm run test:e2e
-          start: npm run start-test-servers "&" sleep 5
+          start: npm run startFE "&" npm run devBE "&" sleep 5
           wait-on: http://localhost:3000
       - name: Deployment Successful
         if: success()
