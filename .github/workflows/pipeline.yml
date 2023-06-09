@@ -4,13 +4,10 @@ on:
   push:
     branches:
       - master
-  pull_request:
-    branches: [master]
-    types: [opened, synchronize]
 
 jobs:
   simple_deployment_pipeline:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -41,26 +38,19 @@ jobs:
         with:
           command: npm run test:e2e
           wait-on: http://localhost:3000
-      - name: Test Success
-        uses: rjstone/discord-webhook-notify@v1
+      - name: Deployment Successful
         if: success()
+        uses: rjstone/discord-webhook-notify@v1
         with:
           severity: info
-          details: Test Succeeded!
+          details: Successfully Deployed!
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-      - name: Test Failure
-        uses: rjstone/discord-webhook-notify@v1
+      - name: Deployment Failure
         if: failure()
+        uses: rjstone/discord-webhook-notify@v1
         with:
           severity: error
-          details: Test Failed!
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-      - name: Test Cancelled
-        uses: rjstone/discord-webhook-notify@v1
-        if: cancelled()
-        with:
-          severity: warn
-          details: Test Cancelled!
+          details: Deployment Failed!
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
   tag_release:
@@ -69,34 +59,18 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          fetch-depth: "0"
+          node-version: "16"
       - name: Bump version and push tag
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && contains(github.event.commits.*.message, '#skip') != true }}
-        uses: anothrNick/github-tag-action@1.64.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          WITH_V: true
-          PRERELEASE: true
+        run: |
+          echo "Bumping version..."
+          npx semantic-release
+          echo "Pushing tag..."
+          git push --follow-tags
       - name: Deploy to production
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && contains(github.event.commits.*.message, '#skip') != true }}
-        uses: johnbeynon/render-deploy-action@v0.0.8
-        with:
-          service-id: ${{ secrets.MY_RENDER_SERVICE_ID }}
-          api-key: ${{ secrets.MY_RENDER_API_KEY }}
-      - name: Deployment Successful
-        uses: rjstone/discord-webhook-notify@v1
-        if: ${{ github.event_name == 'push' && success() }}
-        with:
-          severity: info
-          details: Successfully Deployed!
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-      - name: Deployment Failure
-        uses: rjstone/discord-webhook-notify@v1
-        if: ${{ github.event_name == 'push' && failure() }}
-        with:
-          severity: error
-          details: Deployment Failed!
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          echo "Deploying to production..."
