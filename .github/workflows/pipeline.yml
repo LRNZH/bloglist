@@ -31,7 +31,7 @@ jobs:
         with:
           command: npm run test:e2e
           start: npm run devBE
-          wait-on: http://localhost:3000
+          wait-on: http://localhost:3001
       - name: Lint
         run: npm run eslint
       - name: Test backend
