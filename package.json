@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start-servers": "npm run devBE & npm run startFE",
+    "start-test-servers": "npm run startBE & npm run startFE",
     "startFE": "react-scripts start",
     "buildFE": "react-scripts build",
     "ejectFE": "react-scripts eject",

@@ -13,8 +13,8 @@ jobs:
     runs-on: self-hosted
     env:
       MONGODB_URI: ${{ secrets.MONGODB_URI }}
-      BEPORT: ${{ secrets.BEPORT }}
-      PORT: ${{ secrets.PORT }}
+      BEPORT: 3001
+      PORT: 3000
       TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
       SECRET: ${{ secrets.SECRET }}
     steps:
@@ -34,8 +34,8 @@ jobs:
         uses: cypress-io/github-action@v5
         with:
           command: npm run test:e2e
-          start: npm run devBE
-          wait-on: http://localhost:${{ secrets.BEPORT }}
+          start: npm run start-test-servers "&" sleep 5
+          wait-on: http://localhost:3000
       - name: Deployment Successful
         if: success()
         uses: rjstone/discord-webhook-notify@v1
