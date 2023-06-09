@@ -30,17 +30,12 @@ jobs:
         run: npm run buildFE
       - name: Test backend
         run: npm run testBE
-      - name: Start backend server
-        run: npm run devBE
-      - name: Wait for backend server
-        run: |
-          echo "Waiting for backend server to start..."
-          npx wait-on http://localhost:${{ secrets.BEPORT }}
       - name: Run e2e tests
         uses: cypress-io/github-action@v5
         with:
           command: npm run test:e2e
-          wait-on: http://localhost:${{ secrets.PORT }}
+          start: npm run devBE
+          wait-on: http://localhost:${{ secrets.BEPORT }}
       - name: Deployment Successful
         if: success()
         uses: rjstone/discord-webhook-notify@v1
