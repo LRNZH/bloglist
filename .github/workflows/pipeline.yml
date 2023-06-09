@@ -28,7 +28,7 @@ jobs:
         run: npm run build
       - name: Start backend server
         run: |
-          npm run devBE &
+          npm run devBE "&"
       - name: Wait for backend server to start
         run: |
           until nc -z localhost 3001; do
