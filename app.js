@@ -34,6 +34,10 @@ app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/blogs', commentRouter)
 
+app.get('/health', (req, res) => {
+  res.send('OK')
+})
+
 if (process.env.NODE_ENV === 'development') {
   console.log('**** testing mode ****')
   const testingRouter = require('./controllers/testing')

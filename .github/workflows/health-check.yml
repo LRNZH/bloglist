@@ -2,7 +2,7 @@ name: Periodic Health Check
 
 on:
   schedule:
-    - cron: '0 12 * * *'  # Runs once a day at midnight
+    - cron: "0 12 * * *" # Runs once a day at mid-day
 
 jobs:
   health_check:
@@ -11,7 +11,7 @@ jobs:
       - name: Check the deployed service URL
         uses: jtalk/url-health-check-action@v3
         with:
-          url: https://pokedex-uiap.onrender.com/
+          url: https://bloglist-cjpf.onrender.com/
           follow-redirect: true
           max-attempts: 3
           retry-delay: 5s
@@ -21,12 +21,11 @@ jobs:
         with:
           severity: info
           details: Website is Alive!
-          webhookUrl: ${{ secrets.CODE_WEBHOOK }}
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Site Dead
         uses: rjstone/discord-webhook-notify@v1
         if: failure()
         with:
           severity: error
           details: Website Down!
-          webhookUrl: ${{ secrets.CODE_WEBHOOK }}
- 
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
